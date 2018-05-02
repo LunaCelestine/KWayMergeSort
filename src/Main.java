@@ -5,6 +5,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+
         Scanner scan = new Scanner(System.in);
         System.out.println("K Way Merge Test\n");
 
@@ -12,9 +13,11 @@ public class Main {
         System.out.println("Enter K and N");
         int K = scan.nextInt();
         int N = scan.nextInt();
-
+        Sorter sorter = new Sorter();
+        sorter.testTiming(1073741824, 4);
+/*
         int[][] arr = new int[K][N];
-        /** Accept all elements **/
+        *//** Accept all elements **//*
         System.out.println("Enter " + K + " sorted arrays of length " + N);
 
         for (int i = 0; i < K; i++)
@@ -24,11 +27,8 @@ public class Main {
         Sorter kwm = new Sorter();
 
         int[] mergedArray = kwm.iterativeMergeSort(arr);
-        /** Print merged array **/
-        System.out.println("\nMerged Array : ");
-        for (int i = 0; i < mergedArray.length; i++)
-            System.out.print(mergedArray[i] + " ");
-        System.out.println();
+
+*/
     }
 
 }

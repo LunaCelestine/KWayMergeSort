@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.Arrays;
+import java.util.Random;
 
 public class Sorter {
 
@@ -71,7 +73,7 @@ public class Sorter {
     }
 
 
-    public int[] iterativeMergeSort(int[][] arr) {
+    public static int[] iterativeMergeSort(int[][] arr) {
         int K = arr.length;
         int N = arr[0].length;
 
@@ -99,8 +101,72 @@ public class Sorter {
         }
         return mergedArray;
     }
+    public static void mergesort (int[] data) {
+        mergesortRecursive (data, 0, data.length - 1);
+    }
+
+    public static void mergesortRecursive (int[] data, int low, int high) {
+        if (low < high) {
+            mergesortRecursive (data,
+                    low,
+                    low + (high-low)/2 );
+            mergesortRecursive (data,
+                    low + (high-low)/2 + 1,
+                    high);
+            merge (data, low, high);
+        }
+    }
 
 
+    public static void merge (int[] data, int low, int high) {
+        // create a new array for the sorted data
+        int[] temp = new int[high - low + 1];
+
+        int lowIndex = low;
+        int highIndex = low + (high-low)/2 + 1;
+        int midIndex = low + (high-low)/2;
+        int tempIndex = 0;
+
+        while ((lowIndex <= midIndex) &&
+                (highIndex <= high)) {
+            if (data[lowIndex] < data[highIndex]) {
+                temp[tempIndex] = data[lowIndex];
+                tempIndex++;
+                lowIndex++;
+            } else {
+                temp[tempIndex] = data[highIndex];
+                tempIndex++;
+                highIndex++;
+            }
+        }
+
+        if (lowIndex > midIndex) {
+            // low subarray finished first
+            while (highIndex <= high) {
+                temp[tempIndex] = data[highIndex];
+                tempIndex++;
+                highIndex++;
+            }
+
+        } else {
+            // high subarray finished first
+            while (lowIndex <= midIndex) {
+                temp[tempIndex] = data[lowIndex];
+                tempIndex++;
+                lowIndex++;
+            }
+        }
+
+        // copy data back from temp to data
+        int dataIndex;
+        for (tempIndex = 0, dataIndex = low;
+             dataIndex <= high;
+             tempIndex++, dataIndex++) {
+
+            data[dataIndex] = temp[tempIndex];
+        }
+
+    }
 
     /**
      * Given an integer size, produce an array of size random integers.
@@ -146,8 +212,8 @@ public class Sorter {
     /**
      * Perform checks to see if the algorithm has a bug.
      */
-    private static void testCorrectness() {
-        int[] data = getRandomPermutationOfIntegers(8);
+    public static void testCorrectness(int size) {
+        int[] data = getRandomPermutationOfIntegers(size);
 
         for (int i = 0; i < data.length; i++) {
             System.out.println("data[" + i + "] = " + data[i]);
@@ -156,7 +222,7 @@ public class Sorter {
         int k = 5;
         // mergesort(data);
         kwayMergesort(data, k);
-        //insertionSort(data);
+
 
         // verify that data[i] = i
         for (int i = 0; i < data.length; i++) {
@@ -175,35 +241,42 @@ public class Sorter {
     /**
      * Perform timing experiments.
      */
-    private static void testTiming () {
-        // timer variables
-        long totalTime = 0;
-        long startTime = 0;
-        long finishTime = 0;
+    public static void testTiming (int N, int kvalue ) {
 
-        // start the timer
-        Date startDate = new Date();
-        startTime = startDate.getTime();
 
-        int n = 16;    // n = size of the array
-        int k = 2;         // k = k in k-way mergesort
+
+        int n = N;    // n = size of the array
+        int k = kvalue;         // k = k in k-way mergesort
         int[] data = getRandomArrayOfIntegers(n);
-        //heapSort(data);
-//        insertionSort(data);
-        // mergesort(data);
-        kwayMergesort(data, k);
 
-        // stop the timer
-        Date finishDate = new Date();
-        finishTime = finishDate.getTime();
-        totalTime += (finishTime - startTime);
 
-//        System.out.println("** Results for k-way mergesort:");
+        //insertionSort(data);
+        //mergesort(data);
+
+
+        int iterativeMergeData[][] = new int[kvalue][n];
+        Random rand = new Random();
+        for (int i = 0; i < kvalue; i++)
+            for (int j = 0; j < N; j++)
+                iterativeMergeData[i][j] = rand.nextInt();
+
+
+        //iterativeMergeSort(iterativeMergeData);
+
+
+
+        //kwayMergesort(data, k);
+
+        long startTime2 = System.nanoTime();
+        Arrays.sort(data);
+        long endTime2 = System.nanoTime();
+        long duration2 = (endTime2 - startTime2);
+
+//        System.out.println("** Results for k-way recursive mergesort:");
+//        System.out.println("** Results for iterative mergesort:");
+//        System.out.println("** Results for sort:");
 //        System.out.println("** Results for mergesort:");
-//        System.out.println("** Results for insertionSort:");
-        System.out.println("** Results for heapSort:");
-        System.out.println("    " + "n = " + n + "    " + "k = " + k);
-        System.out.println("    " + "Time: " + totalTime + " ms.");
+        System.out.println(duration2/1000000 + "ms");
     }
 
 }
